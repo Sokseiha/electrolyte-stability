@@ -30,7 +30,7 @@ class Args:
     model_path = os.environ.get("MODEL_PATH")
     result_path = os.environ.get("RESULT_PATH")
     data_name = f"{DATA_NAME}"
-    log_file = f"FlowER"
+    log_file = f"electrolyte-stability"
     load_from = ""
     seed = int(os.environ.get("SEED", 42))
     resume = True

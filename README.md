@@ -1,5 +1,8 @@
-# FlowER: Flow Matching for Electron Redistribution
-_Joonyoung F. Joung*, Mun Hong Fong*, Nicholas Casetti, Jordan P. Liles, Ne S. Dassanayake, Connor W. Coley_
+# electrolyte-stability
+
+_A fork of **FlowER: Flow Matching for Electron Redistribution**, extended for electrolyte stability prediction. See [Citation](#citation) for the original paper._
+
+_Original authors: Joonyoung F. Joung*, Mun Hong Fong*, Nicholas Casetti, Jordan P. Liles, Ne S. Dassanayake, Connor W. Coley_
 
 **NOW blossomed in _Nature_!**
 
@@ -43,25 +46,25 @@ $ pip install -r requirements.txt
 
 ## Data/Model preparation
 FlowER is trained on a combination of subset of USPTO-FULL (Dai et al.), RmechDB and PmechDB (Baldi et al.). <br>
-To retrain/reproduce FlowER, download `data.zip` and `checkpoints.zip` from [this link](https://doi.org/10.6084/m9.figshare.32513667), unzip them, and place under `FlowER/`. <br>
+To retrain/reproduce FlowER, download `data.zip` and `checkpoints.zip` from [this link](https://doi.org/10.6084/m9.figshare.32513667), unzip them, and place under the repository root. <br>
 The folder structure for the `data` folder is `data/{DATASET_NAME}/{train,val,test}.txt` and `checkpoints` folder is `checkpoints/{DATASET_NAME}/{EXPERIMENT_NAME}/model.{STEP}_{IDX}.pt`
 
 ## On how FlowER is structured
-The workflow of FlowER revolves mainly around 2 files. `run_FlowER_large_newData.sh` and `settings.py`. <br> 
+The workflow of FlowER revolves mainly around 2 files. `run_electrolyte_stability.sh` and `settings.py`. <br> 
 The main idea is to use comments `#` to turn on/off configurations when training/validating/inferencing FlowER. <br>
-`run_FlowER_large_newData.sh` allows user to specify your data folder name, experiment name, gpu configuration and choose which scripts to run. <br>
+`run_electrolyte_stability.sh` allows user to specify your data folder name, experiment name, gpu configuration and choose which scripts to run. <br>
 `settings.py` allows user to specify different configurations for different workflows. 
 
 ## Training Pipeline
 ### 1. Train FlowER
-Ensure that `data/` folder is populated accordingly and `run_FlowER_large_newData.sh` is pointing to the correct files.
+Ensure that `data/` folder is populated accordingly and `run_electrolyte_stability.sh` is pointing to the correct files.
 ```
 export TRAIN_FILE=$PWD/data/$DATA_NAME/train.txt
 export VAL_FILE=$PWD/data/$DATA_NAME/val.txt
 ```
-Check `run_FlowER_large_newData.sh` has `scripts/train.sh` uncommented. 
+Check `run_electrolyte_stability.sh` has `scripts/train.sh` uncommented. 
 ```bash
-$ sh run_FlowER_large_newData.sh
+$ sh run_electrolyte_stability.sh
 ```
 
 ### 2. Validate FlowER
@@ -72,9 +75,9 @@ You can validate FlowER on the validation set. Then, in `settings.py`, ensure th
     steps2validate =  ["1050000", "1320000", "1500000", "930000", "1020000"]
 ```
 `steps2validate` refers to the checkpoints that are selected based on train logs situated at the `/logs` folder. <br>
-Check `run_FlowER_large_newData.sh` has `scripts/eval.sh` uncommented. 
+Check `run_electrolyte_stability.sh` has `scripts/eval.sh` uncommented. 
 ```bash
-$ sh run_FlowER_large_newData.sh
+$ sh run_electrolyte_stability.sh
 ```
 
 
@@ -84,9 +87,9 @@ You can validate FlowER on the test set. Then, in `settings.py`, specify your ch
     # inference #
     do_validate = False
 ```
-Check `run_FlowER_large_newData.sh` has `scripts/eval.sh` uncommented. 
+Check `run_electrolyte_stability.sh` has `scripts/eval.sh` uncommented. 
 ```bash
-$ sh run_FlowER_large_newData.sh
+$ sh run_electrolyte_stability.sh
 ```
 
 #### FlowER train/valid/test input
@@ -134,7 +137,7 @@ An elementary reaction step reaction follows the format of `mapped_reaction|sequ
 
 ### 4. Use FlowER for search
 FlowER mainly uses beam search to seek for plausible mechanistic pathways. Users can input their smiles at `data/flower_new_dataset/beam.txt`. <br>
-Ensure that in `run_FlowER_large_newData.sh`, the `TEST_FILE` variable is pointing towards the correct file.
+Ensure that in `run_electrolyte_stability.sh`, the `TEST_FILE` variable is pointing towards the correct file.
 ```
 export TEST_FILE=$PWD/data/$DATA_NAME/beam.txt
 ```
@@ -148,9 +151,9 @@ Ensure that in `settings.py`, beam search configuration are uncommented and spec
     max_depth = 15
     chunk_size = 50
 ```
-Check `run_FlowER_large_newData.sh` has `scripts/search.sh` uncommented. 
+Check `run_electrolyte_stability.sh` has `scripts/search.sh` uncommented. 
 ```bash
-$ sh run_FlowER_large_newData.sh
+$ sh run_electrolyte_stability.sh
 ```
 Visualize your route at `examples/vis_network.ipynb`
 
@@ -189,7 +192,7 @@ Because FlowER and the SMILES-based baselines produce different outputs, conserv
 Run inference on the test set to produce the prediction file (`<phase>-<sample_size>-<checkpoint>.txt` under `RESULT_PATH`), using **30 samples** to match the baselines (`SAMPLE_SIZE` is read from the environment):
 ```bash
 export SAMPLE_SIZE=30
-sh run_FlowER_large_newData.sh        # with scripts/eval_multiGPU.sh uncommented
+sh run_electrolyte_stability.sh        # with scripts/eval_multiGPU.sh uncommented
 python examples/conservation/flower_conservation.py <RESULT_PATH>/<prediction>.txt
 ```
 
