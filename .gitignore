@@ -10,3 +10,4 @@ results
 pyrightconfig.toml
 
 old/*
+examples/figures/
