@@ -1,0 +1,24 @@
+[build-system]
+requires = ["setuptools>=64"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "electrolyte-stability"
+version = "0.1.0"
+description = "Electron flow matching for reaction mechanism prediction (FlowER fork), extended for electrolyte stability"
+readme = "README.md"
+requires-python = ">=3.10"
+
+# Dependencies are deliberately NOT declared here. requirements.txt pins exact
+# versions (torch==2.4.0, numpy==1.26.4) that would downgrade an existing
+# environment. Install with --no-deps and manage dependencies separately.
+
+[tool.setuptools]
+py-modules = [
+    "settings",
+    "train",
+    "eval_multiGPU",
+    "beam_predict",
+    "sequence_evaluation",
+]
+packages = ["model", "utils"]
